@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+{% block title %}How It Works - CNN Architecture & Pipeline | Plant Disease Detection Using CNN{% endblock %}
+
+{% block content %}
+<div class="container section">
+  <div class="section-header">
+    <span class="section-tag">Deep Learning Architecture</span>
+    <h1 class="section-title">How The System Works</h1>
+    <p class="section-desc">
+      An end-to-end overview of the Convolutional Neural Network pipeline from raw RGB leaf inputs to disease classification.
+    </p>
+  </div>
+
+  <div class="pipeline-timeline">
+
+    <!-- Step 1: Upload -->
+    <div class="pipeline-step">
+      <div class="step-num-box">1</div>
+      <div class="step-content">
+        <h3>Upload Leaf Image</h3>
+        <p>
+          The user provides a high-resolution photograph of a healthy or symptomatic plant leaf via drag-and-drop or file selector. The client validates the file against supported MIME types (JPG, PNG, WEBP) and ensures file limits (&lt;16 MB).
+        </p>
+      </div>
+    </div>
+
+    <!-- Step 2: Image Preprocessing -->
+    <div class="pipeline-step">
+      <div class="step-num-box">2</div>
+      <div class="step-content">
+        <h3>Image Preprocessing & Rescaling</h3>
+        <p>
+          The image is decoded using PIL into an RGB channel matrix, dynamically resized to a standardized input resolution of <strong>128 × 128 pixels</strong>, and scaled using a <code>Rescaling(1./255)</code> layer to normalize pixel intensity ranges from <code>[0, 255]</code> to floating-point values <code>[0.0, 1.0]</code>.
+        </p>
+        <div class="step-code-preview">
+          img_resized = img.resize((128, 128))<br>
+          tensor = np.expand_dims(np.array(img_resized, dtype=np.float32), axis=0)
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3: CNN Feature Extraction -->
+    <div class="pipeline-step">
+      <div class="step-num-box">3</div>
+      <div class="step-content">
+        <h3>Convolutional Layers & Feature Extraction</h3>
+        <p>
+          Four sequential 2D Convolutional blocks apply learnable kernels (3×3 receptive filters) across the spatial dimensions:
+        </p>
+        <ul style="padding-left: 20px; margin-top: 8px; color: var(--text-muted); font-size: 0.92rem;">
+          <li><strong>Block 1 (32 Filters):</strong> Captures low-level spatial features such as edges, leaf boundaries, and basic veins.</li>
+          <li><strong>Block 2 (64 Filters):</strong> Detects textural variations, spot perimeters, and circular discoloration patterns.</li>
+          <li><strong>Block 3 & 4 (128 & 256 Filters):</strong> Extracts high-level lesion morphology, bullseye rings, concentric necrosis, and pustule shapes.</li>
+        </ul>
+        <div class="step-code-preview">
+          layers.Conv2D(32, (3, 3), padding="same", activation="relu"),<br>
+          layers.BatchNormalization(),<br>
+          layers.MaxPooling2D((2, 2))
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 4: Pooling & Regularization -->
+    <div class="pipeline-step">
+      <div class="step-num-box">4</div>
+      <div class="step-content">
+        <h3>Batch Normalization, Pooling & Dropout</h3>
+        <p>
+          Each convolutional block includes <strong>Batch Normalization</strong> to stabilize gradient descent and <strong>MaxPooling</strong> to reduce spatial dimensions while retaining invariant dominant activations. A <strong>Dropout layer (0.4)</strong> prevents overfitting by randomly deactivating neurons during training.
+        </p>
+      </div>
+    </div>
+
+    <!-- Step 5: Dense Classification -->
+    <div class="pipeline-step">
+      <div class="step-num-box">5</div>
+      <div class="step-content">
+        <h3>Global Pooling & Dense Classification Head</h3>
+        <p>
+          A <code>GlobalAveragePooling2D</code> layer aggregates spatial feature maps into a dense 1D embedding vector, passed through a fully connected Dense layer (128 units with ReLU activation) before feeding into the final output layer.
+        </p>
+      </div>
+    </div>
+
+    <!-- Step 6: Prediction & Confidence -->
+    <div class="pipeline-step">
+      <div class="step-num-box">6</div>
+      <div class="step-content">
+        <h3>Softmax Output & Diagnostic Recommendations</h3>
+        <p>
+          The final dense layer applies the <strong>Softmax activation function</strong> to output a normalized probability distribution across all trained plant classes. The index with maximum probability determines the predicted diagnosis, and the system delivers actionable, organic cultural management instructions.
+        </p>
+        <div class="step-code-preview">
+          confidence = np.max(predictions[0]) * 100.0<br>
+          predicted_class = class_names[np.argmax(predictions[0])]
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Interactive Viva Architecture Summary -->
+  <div style="background: #ffffff; border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: 36px; margin-top: 50px; box-shadow: var(--shadow-sm);">
+    <h3 style="margin-bottom: 12px; color: var(--primary-900);">Academic Summary Table</h3>
+    <table class="matrix-table">
+      <thead>
+        <tr>
+          <th>Layer Component</th>
+          <th>Configuration</th>
+          <th>Academic Function</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Input Layer</strong></td>
+          <td>(128, 128, 3)</td>
+          <td>Accepts 3-channel RGB digital leaf photographs</td>
+        </tr>
+        <tr>
+          <td><strong>Data Augmentation</strong></td>
+          <td>Flip, Rotation (0.15), Zoom (0.1)</td>
+          <td>Prevents overfitting and enhances model invariance</td>
+        </tr>
+        <tr>
+          <td><strong>Conv2D Blocks (4x)</strong></td>
+          <td>32, 64, 128, 256 filters (3x3 kernel)</td>
+          <td>Spatial feature extraction and receptive field aggregation</td>
+        </tr>
+        <tr>
+          <td><strong>Batch Normalization</strong></td>
+          <td>Standardized activations</td>
+          <td>Accelerates training convergence and stabilizes gradients</td>
+        </tr>
+        <tr>
+          <td><strong>Pooling</strong></td>
+          <td>MaxPooling2D (2x2) & GlobalAvgPool</td>
+          <td>Downsamples spatial dimensions, translation invariance</td>
+        </tr>
+        <tr>
+          <td><strong>Dense Head</strong></td>
+          <td>128 ReLU units + Dropout(0.4)</td>
+          <td>High-level non-linear feature combination</td>
+        </tr>
+        <tr>
+          <td><strong>Output Layer</strong></td>
+          <td>N units (Softmax)</td>
+          <td>Generates posterior probability distribution over classes</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

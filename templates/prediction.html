@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+
+{% block title %}Plant Leaf Disease Prediction | Plant Disease Detection Using CNN{% endblock %}
+
+{% block content %}
+<div class="container section">
+  <div class="section-header">
+    <span class="section-tag">CNN Inference Engine</span>
+    <h1 class="section-title">Plant Leaf Disease Detection</h1>
+    <p class="section-desc">
+      Upload or drag a clear photograph of a plant leaf to classify pathology and receive preventive guidance.
+    </p>
+  </div>
+
+  <div class="predict-wrapper">
+
+    <!-- Model Status Notice Banner -->
+    {% if not status.trained %}
+    <div class="alert-box alert-warning">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;">
+        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+        <line x1="12" y1="9" x2="12" y2="13"></line>
+        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+      </svg>
+      <div>
+        <strong>Model Notice:</strong> The CNN model is awaiting training.
+        <br>
+        Place your dataset folders in <code>dataset/</code> and run:
+        <span style="display:inline-block; background:rgba(0,0,0,0.06); padding:2px 8px; border-radius:4px; font-family:monospace; margin-top:4px;">python train_model.py</span>
+        <br>
+        <span style="font-size:0.86rem; color:#78350f;">The website UI is completely functional and ready to connect instantly once trained.</span>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Dynamic Notification / Error Container -->
+    <div id="alertContainer" style="display: none;"></div>
+
+    <!-- Upload Card -->
+    <div class="upload-card">
+      <input type="file" id="fileInput" accept=".jpg,.jpeg,.png,.webp" style="display: none;">
+
+      <!-- Drag & Drop Zone -->
+      <div class="drop-zone" id="dropZone">
+        <svg class="drop-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="17 8 12 3 7 8"></polyline>
+          <line x1="12" y1="3" x2="12" y2="15"></line>
+        </svg>
+        <h3 class="drop-title">Drag & Drop Plant Leaf Image Here</h3>
+        <p class="drop-subtitle">or click anywhere in this box to browse local files</p>
+        <button type="button" class="btn btn-secondary" onclick="document.getElementById('fileInput').click()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path><path d="M12 12v9"></path><path d="m16 16-4-4-4 4"></path></svg>
+          Browse Image
+        </button>
+        <p class="drop-info">Supported formats: JPG, JPEG, PNG, WEBP (Max: 16 MB)</p>
+      </div>
+
+      <!-- Image Preview Section (Visible after upload) -->
+      <div class="preview-container" id="previewContainer">
+        <div class="preview-grid">
+          <div class="preview-image-box">
+            <img src="" id="previewImg" alt="Selected Leaf Preview">
+          </div>
+          <div class="preview-details">
+            <h4 class="preview-name" id="previewName">leaf_image.jpg</h4>
+            <p class="preview-size" id="previewSize">Calculating...</p>
+            <div class="preview-actions">
+              <button type="button" class="btn btn-primary" id="btnDetect">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                Detect Disease
+              </button>
+              <button type="button" class="btn-danger" id="btnRemove">
+                Remove Image
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Test Samples Section -->
+      <div class="sample-leaves-section">
+        <div class="sample-leaves-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+          Quick Test Demonstration Samples:
+        </div>
+        <div class="sample-leaf-buttons">
+          <button type="button" class="sample-pill-btn" data-sample="sample_early_blight.jpg" data-title="Tomato Leaf (Early Blight Spotted)">
+            <img src="{{ url_for('static', filename='images/sample_early_blight.jpg') }}" alt="Early Blight Sample">
+            <span>Sample 1: Early Blight Leaf</span>
+          </button>
+          <button type="button" class="sample-pill-btn" data-sample="sample_healthy.jpg" data-title="Tomato Leaf (Healthy Vibrant)">
+            <img src="{{ url_for('static', filename='images/sample_healthy.jpg') }}" alt="Healthy Sample">
+            <span>Sample 2: Healthy Leaf</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Spinner Loading State -->
+    <div class="spinner-container" id="spinnerContainer">
+      <div class="spinner"></div>
+      <h4 style="color: var(--primary-900);">Analyzing Leaf with Deep CNN Model...</h4>
+      <p style="color: var(--text-muted); font-size: 0.9rem;">Extracting feature maps and computing Softmax probability.</p>
+    </div>
+
+    <!-- Prediction Result Card -->
+    <div class="result-card" id="resultCard">
+      <div class="result-header">
+        <div class="result-title-group">
+          <span style="font-size: 0.8rem; font-weight:700; color:var(--primary-600); text-transform:uppercase; letter-spacing:0.05em;">Diagnosis Report</span>
+          <h3 id="resDiseaseName">Tomato Early Blight</h3>
+          <p class="result-meta" id="resPlant">Plant: Tomato</p>
+        </div>
+        <div>
+          <span class="badge badge-amber" id="resStatusBadge" style="font-size: 0.92rem; padding: 8px 16px;">Disease Detected</span>
+        </div>
+      </div>
+
+      <div class="result-grid">
+        <div class="result-image-wrap">
+          <img src="" id="resImage" alt="Analyzed Leaf">
+        </div>
+
+        <div class="result-info-wrap">
+          <!-- Confidence Gauge -->
+          <div class="confidence-bar-container">
+            <div class="confidence-label-row">
+              <span>Model Confidence Score</span>
+              <span id="resConfidenceVal" style="color: var(--primary-700); font-size:1.15rem;">94.6%</span>
+            </div>
+            <div class="confidence-track">
+              <div class="confidence-fill" id="resConfidenceFill"></div>
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div class="detail-section">
+            <h4>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+              Clinical Description
+            </h4>
+            <p id="resDescription" style="font-size:0.95rem; color:var(--text-body);"></p>
+          </div>
+
+          <!-- Symptoms -->
+          <div class="detail-section">
+            <h4>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              Identified Symptoms
+            </h4>
+            <ul class="symptoms-list" id="resSymptomsList"></ul>
+          </div>
+
+          <!-- Recommended Action -->
+          <div class="detail-section">
+            <h4>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              Recommended General Action
+            </h4>
+            <ul class="recs-list" id="resRecsList"></ul>
+          </div>
+
+          <!-- Alternative Candidate Predictions -->
+          <div class="detail-section" id="topPredSection" style="display: none; margin-top:20px; padding-top:16px; border-top:1px dashed var(--border-light);">
+            <h4 style="font-size:0.95rem; margin-bottom:12px;">Alternative Class Predictions:</h4>
+            <div id="resTopPredictions"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="disclaimer-box">
+        <strong>Academic Advisory Note:</strong> Predictions are generated using a Convolutional Neural Network trained on botanical image benchmarks. Recommended actions are general informational best practices. For critical commercial operations, verify with local agricultural extension specialists.
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block title %}Plant Disease Detection Using CNN | AI-Powered Leaf Identification{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+  <div class="container hero-grid">
+    <div class="hero-content">
+      <div class="hero-badge">
+        {% if status.trained %}
+        <span class="badge badge-green">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          CNN Model Active ({{ status.classes|length }} Classes Trained)
+        </span>
+        {% else %}
+        <span class="badge badge-amber">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+          UI Ready • Model Awaiting Training
+        </span>
+        {% endif %}
+      </div>
+
+      <h1 class="hero-title">
+        Detect Plant Diseases <br>
+        <span class="highlight">Using CNN & AI</span>
+      </h1>
+
+      <p class="hero-desc">
+        Upload a plant leaf image and let our deep Convolutional Neural Network analyze it to identify possible diseases with high confidence scores and actionable recommendations.
+      </p>
+
+      <div class="hero-actions">
+        <a href="{{ url_for('prediction') }}" class="btn btn-primary btn-lg" id="btnStartDetection">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+          Start Detection
+        </a>
+        <a href="{{ url_for('how_it_works') }}" class="btn btn-secondary btn-lg" id="btnLearnMore">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8"></polygon></svg>
+          Learn More
+        </a>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat-item">
+          <h4>
+            {% if status.history and status.history.num_classes %}
+              {{ status.history.num_classes }}
+            {% else %}
+              Multi-Class
+            {% endif %}
+          </h4>
+          <p>Leaf Pathologies</p>
+        </div>
+        <div class="stat-item">
+          <h4>
+            {% if status.history and status.history.final_val_accuracy %}
+              {{ (status.history.final_val_accuracy * 100)|round(1) }}%
+            {% else %}
+              CNN Deep
+            {% endif %}
+          </h4>
+          <p>Model Architecture</p>
+        </div>
+        <div class="stat-item">
+          <h4>&lt; 500ms</h4>
+          <p>Inference Speed</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hero Media Visual -->
+    <div class="hero-media">
+      <div class="hero-card-frame">
+        <img src="{{ url_for('static', filename='images/hero-plant.jpg') }}" alt="Plant Leaf Neural Network AI" class="hero-image">
+        
+        <div class="floating-pill top-right">
+          <span style="display:inline-block; width:10px; height:10px; background:#22c55e; border-radius:50%;"></span>
+          <span>Convolutional Feature Maps</span>
+        </div>
+
+        <div class="floating-pill bottom-left">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          <span>Automated Health Score</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Feature Cards Section -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">Key Capabilities</span>
+      <h2 class="section-title">Designed for Modern Agricultural AI</h2>
+      <p class="section-desc">Empowering farmers and researchers with instant computerized visual diagnostics.</p>
+    </div>
+
+    <div class="cards-grid">
+      <!-- Card 1 -->
+      <div class="feature-card">
+        <div class="feature-icon-box">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg>
+        </div>
+        <h3 class="feature-title">AI-Based Detection</h3>
+        <p class="feature-text">
+          Utilizes multi-layered Convolutional Neural Networks (CNN) with Batch Normalization to extract micro-textural cues and color lesion profiles.
+        </p>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="feature-card">
+        <div class="feature-icon-box">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+        </div>
+        <h3 class="feature-title">Fast Prediction</h3>
+        <p class="feature-text">
+          Instantaneous client-to-server inference pipeline. Delivers comprehensive diagnostic feedback in less than half a second.
+        </p>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="feature-card">
+        <div class="feature-icon-box">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"></path><path d="M12 20V4"></path><path d="M6 20v-6"></path></svg>
+        </div>
+        <h3 class="feature-title">Confidence Score</h3>
+        <p class="feature-text">
+          Displays exact Softmax class probability distribution along with alternative candidate classifications for transparent reliability.
+        </p>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="feature-card">
+        <div class="feature-icon-box">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+        </div>
+        <h3 class="feature-title">Easy to Use</h3>
+        <p class="feature-text">
+          Intuitive drag-and-drop workspace, instant image preview, preloaded test samples, and mobile-friendly responsive navigation.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Call to Action Banner -->
+<section class="section">
+  <div class="container" style="text-align: center;">
+    <div style="background: linear-gradient(135deg, var(--primary-900), var(--primary-700)); padding: 60px 30px; border-radius: 24px; color: #fff; box-shadow: var(--shadow-lg);">
+      <h2 style="color: #fff; font-size: 2.2rem; margin-bottom: 14px;">Ready to Analyze Your First Plant Leaf?</h2>
+      <p style="color: #d1fae5; max-width: 580px; margin: 0 auto 30px; font-size: 1.05rem;">
+        Take a picture of any symptomatic or healthy leaf, upload it to the neural engine, and get an immediate classification report.
+      </p>
+      <a href="{{ url_for('prediction') }}" class="btn btn-secondary btn-lg" style="background:#fff; color:var(--primary-900); font-weight:700;">
+        Launch Detection Portal
+      </a>
+    </div>
+  </div>
+</section>
+{% endblock %}

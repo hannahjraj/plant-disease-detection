@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Plant Disease Detection Using CNN | AI-Powered Plant Leaf Identification{% endblock %}</title>
+  
+  <meta name="description" content="AI-Powered Plant Leaf Disease Identification System using Deep Convolutional Neural Networks and Flask. Upload leaf images for immediate disease detection and organic management recommendations.">
+  <meta name="keywords" content="Plant Disease Detection, CNN, Machine Learning, TensorFlow, Flask, Agriculture AI, Leaf Identification">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+  <!-- Navigation Header -->
+  <header class="site-header">
+    <div class="container navbar">
+      <a href="{{ url_for('index') }}" class="brand" id="brandLogo">
+        <div class="brand-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2a10 10 0 0 1 10 10c0 5.5-4.5 10-10 10S2 17.5 2 12c0-3.5 1.8-6.6 4.6-8.4"/>
+            <path d="M12 2v20"/>
+            <path d="M12 12c-3-2-6-1-7 2"/>
+            <path d="M12 7c3-1 6 0 7 3"/>
+          </svg>
+        </div>
+        <div class="brand-title">
+          <span class="title-main">AgriVision CNN</span>
+          <span class="title-sub">Plant Disease Detection</span>
+        </div>
+      </a>
+
+      <!-- Mobile Hamburger Button -->
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle Navigation">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+
+      <!-- Navigation Links -->
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="{{ url_for('index') }}" class="nav-link {% if request.endpoint == 'index' %}active{% endif %}">Home</a></li>
+        <li><a href="{{ url_for('about') }}" class="nav-link {% if request.endpoint == 'about' %}active{% endif %}">About</a></li>
+        <li><a href="{{ url_for('how_it_works') }}" class="nav-link {% if request.endpoint == 'how_it_works' %}active{% endif %}">How It Works</a></li>
+        <li><a href="{{ url_for('diseases') }}" class="nav-link {% if request.endpoint == 'diseases' %}active{% endif %}">Diseases</a></li>
+        <li><a href="{{ url_for('performance') }}" class="nav-link {% if request.endpoint == 'performance' %}active{% endif %}">Model Performance</a></li>
+        <li><a href="{{ url_for('prediction') }}" class="nav-link nav-cta {% if request.endpoint == 'prediction' %}active{% endif %}">Start Prediction</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Main Dynamic Content -->
+  <main>
+    {% block content %}
+      {% if not_found %}
+      <div class="container section text-center" style="text-align: center; padding: 100px 0;">
+        <h1 style="font-size: 3rem; margin-bottom: 14px;">404 - Page Not Found</h1>
+        <p style="color: var(--text-muted); margin-bottom: 24px;">The page you are looking for does not exist in the plant detection portal.</p>
+        <a href="{{ url_for('index') }}" class="btn btn-primary">Return to Home</a>
+      </div>
+      {% endif %}
+    {% endblock %}
+  </main>
+
+  <!-- Professional Academic Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h3>Plant Disease Detection Using CNN</h3>
+          <p>AI-Powered Plant Leaf Disease Identification System designed for modern precision agriculture and academic research.</p>
+          <div style="margin-top: 16px;">
+            <span class="badge badge-green" style="font-size: 0.75rem;">Deep Learning & Flask</span>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Navigation</h4>
+          <ul class="footer-links">
+            <li><a href="{{ url_for('index') }}">Home</a></li>
+            <li><a href="{{ url_for('about') }}">About Project</a></li>
+            <li><a href="{{ url_for('how_it_works') }}">Architecture & Workflow</a></li>
+            <li><a href="{{ url_for('prediction') }}">Disease Prediction Tool</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Model & Analytics</h4>
+          <ul class="footer-links">
+            <li><a href="{{ url_for('performance') }}">Training Metrics</a></li>
+            <li><a href="{{ url_for('diseases') }}">Disease Knowledge Base</a></li>
+            <li><span style="color:#64748b; font-size:0.85rem;">CNN Architecture: Conv2D + BatchNorm + Dense</span></li>
+            <li><span style="color:#64748b; font-size:0.85rem;">Framework: TensorFlow / Keras 2.x</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2026 Plant Leaf Disease Identification System | Academic Project Demonstration</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Main JavaScript File -->
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  {% block extra_scripts %}{% endblock %}
+</body>
+</html>

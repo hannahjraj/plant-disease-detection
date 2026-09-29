@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+
+{% block title %}About The Project | Plant Disease Detection Using CNN{% endblock %}
+
+{% block content %}
+<div class="container section">
+  <div class="section-header">
+    <span class="section-tag">Academic Project Overview</span>
+    <h1 class="section-title">About The System</h1>
+    <p class="section-desc">
+      A comprehensive deep learning framework engineering precision agricultural diagnostics for smart farming.
+    </p>
+  </div>
+
+  <div style="max-width: 900px; margin: 0 auto;">
+    <!-- Abstract / Motivation Card -->
+    <div style="background: #ffffff; border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: 36px; box-shadow: var(--shadow-sm); margin-bottom: 30px;">
+      <h2 style="font-size: 1.5rem; color: var(--primary-900); margin-bottom: 14px;">1. Project Abstract & Motivation</h2>
+      <p style="color: var(--text-body); font-size: 1rem; line-height: 1.7; margin-bottom: 16px;">
+        Plant diseases pose a severe threat to global food security, causing agricultural yield reductions of 20% to 40% globally each year. Traditional manual diagnosis by agronomists is labor-intensive, slow, and often inaccessible to smallholder farmers in remote farming regions.
+      </p>
+      <p style="color: var(--text-body); font-size: 1rem; line-height: 1.7;">
+        This academic project presents an automated, computer-vision-based diagnostic system employing a deep <strong>Convolutional Neural Network (CNN)</strong> implemented via <strong>TensorFlow/Keras</strong> and served through a lightweight, modular <strong>Python Flask</strong> web interface. The system accurately classifies leaf abnormalities from digital photographs, computes confidence percentages, and delivers instant, non-chemical advisory actions.
+      </p>
+    </div>
+
+    <!-- Objectives & Key Milestones -->
+    <div style="background: #ffffff; border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: 36px; box-shadow: var(--shadow-sm); margin-bottom: 30px;">
+      <h2 style="font-size: 1.5rem; color: var(--primary-900); margin-bottom: 14px;">2. Project Objectives</h2>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div style="background: var(--bg-card-subtle); padding: 20px; border-radius: var(--radius-md); border: 1px solid var(--border-light);">
+          <h4 style="color: var(--primary-800); margin-bottom: 6px;">Automated Feature Extraction</h4>
+          <p style="font-size: 0.9rem; color: var(--text-muted);">
+            Eliminate handcrafted feature engineering by leveraging autonomous spatial convolutional filters.
+          </p>
+        </div>
+        <div style="background: var(--bg-card-subtle); padding: 20px; border-radius: var(--radius-md); border: 1px solid var(--border-light);">
+          <h4 style="color: var(--primary-800); margin-bottom: 6px;">Dynamic Dataset Adaptation</h4>
+          <p style="font-size: 0.9rem; color: var(--text-muted);">
+            Allow the model to dynamically detect any number of classes directly from folder structures without hardcoding.
+          </p>
+        </div>
+        <div style="background: var(--bg-card-subtle); padding: 20px; border-radius: var(--radius-md); border: 1px solid var(--border-light);">
+          <h4 style="color: var(--primary-800); margin-bottom: 6px;">Empirical Validation</h4>
+          <p style="font-size: 0.9rem; color: var(--text-muted);">
+            Record genuine validation accuracy, loss curves, and confusion matrix tables rather than hypothetical claims.
+          </p>
+        </div>
+        <div style="background: var(--bg-card-subtle); padding: 20px; border-radius: var(--radius-md); border: 1px solid var(--border-light);">
+          <h4 style="color: var(--primary-800); margin-bottom: 6px;">User-Friendly Accessibility</h4>
+          <p style="font-size: 0.9rem; color: var(--text-muted);">
+            Provide a clean, modern web interface with zero framework bloat, optimized for both desktop and mobile screens.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Technology Stack Table -->
+    <div style="background: #ffffff; border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: 36px; box-shadow: var(--shadow-sm); margin-bottom: 30px;">
+      <h2 style="font-size: 1.5rem; color: var(--primary-900); margin-bottom: 16px;">3. Technical Stack Breakdown</h2>
+      <table class="matrix-table">
+        <thead>
+          <tr>
+            <th>Module</th>
+            <th>Technology</th>
+            <th>Implementation Purpose</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Frontend</strong></td>
+            <td>HTML5, CSS3, Vanilla JavaScript</td>
+            <td>Fast, responsive user interface with drag-drop and instant previews</td>
+          </tr>
+          <tr>
+            <td><strong>Backend</strong></td>
+            <td>Python Flask 3.x</td>
+            <td>RESTful routing, file security, multipart handling, and JSON API</td>
+          </tr>
+          <tr>
+            <td><strong>Deep Learning</strong></td>
+            <td>TensorFlow / Keras 2.x</td>
+            <td>Sequential CNN model, Conv2D, BatchNorm, Dropout, Softmax</td>
+          </tr>
+          <tr>
+            <td><strong>Image Processing</strong></td>
+            <td>Pillow (PIL) & NumPy</td>
+            <td>Resizing, channel validation, matrix normalization, tensor shaping</td>
+          </tr>
+          <tr>
+            <td><strong>Analytics & Charts</strong></td>
+            <td>Chart.js</td>
+            <td>Client-side rendering of training/validation loss and accuracy curves</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Viva & Presentation Q&A Section -->
+    <div style="background: #ffffff; border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: 36px; box-shadow: var(--shadow-sm);">
+      <h2 style="font-size: 1.5rem; color: var(--primary-900); margin-bottom: 16px;">4. Academic Viva & Defense FAQ</h2>
+      
+      <div style="margin-bottom: 18px;">
+        <h4 style="color: var(--primary-800); margin-bottom: 4px;">Q1: Why use a CNN instead of traditional machine learning (e.g. SVM or Random Forest)?</h4>
+        <p style="color: var(--text-body); font-size: 0.92rem;">
+          Traditional ML requires manual feature engineering (such as calculating color histograms, Haralick texture features, or SIFT descriptors). CNNs automatically learn hierarchical spatial features directly from raw image pixels through backpropagation, capturing intricate lesion textures more effectively.
+        </p>
+      </div>
+
+      <div style="margin-bottom: 18px;">
+        <h4 style="color: var(--primary-800); margin-bottom: 4px;">Q2: What is the role of Batch Normalization?</h4>
+        <p style="color: var(--text-body); font-size: 0.92rem;">
+          Batch Normalization stabilizes internal covariate shift across layers, accelerates model convergence, and acts as a mild regularizer, allowing higher learning rates without divergence.
+        </p>
+      </div>
+
+      <div>
+        <h4 style="color: var(--primary-800); margin-bottom: 4px;">Q3: How does the system handle novel or custom datasets?</h4>
+        <p style="color: var(--text-body); font-size: 0.92rem;">
+          <code>train_model.py</code> automatically inspects the <code>dataset/</code> directory for class subfolders, computes the number of output units, configures the Softmax classification layer dynamically, and exports <code>class_names.json</code> for seamless integration with Flask.
+        </p>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

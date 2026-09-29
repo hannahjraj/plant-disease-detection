@@ -1,0 +1,197 @@
+{% extends "base.html" %}
+
+{% block title %}Model Performance & Analytics | Plant Disease Detection Using CNN{% endblock %}
+
+{% block content %}
+<div class="container section">
+  <div class="section-header">
+    <span class="section-tag">Empirical Evaluation</span>
+    <h1 class="section-title">CNN Model Performance Dashboard</h1>
+    <p class="section-desc">
+      Comprehensive quantitative metrics, epoch-by-epoch loss/accuracy curves, and confusion matrix validation.
+    </p>
+  </div>
+
+  {% if not has_training_data %}
+  <!-- Untrained State Placeholder (Strictly according to requirements: Do not invent fake values) -->
+  <div style="background: #ffffff; border: 2px dashed #93c5aa; border-radius: var(--radius-lg); padding: 60px 30px; text-align: center; max-width: 820px; margin: 0 auto; box-shadow: var(--shadow-sm);">
+    <div style="width: 72px; height: 72px; background: var(--primary-50); border-radius: 50%; color: var(--primary-700); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M18 20V10"></path>
+        <path d="M12 20V4"></path>
+        <path d="M6 20v-6"></path>
+      </svg>
+    </div>
+    
+    <h2 style="font-size: 1.8rem; color: var(--primary-900); margin-bottom: 12px;">
+      Training results will appear here after the model is trained.
+    </h2>
+    <p style="color: var(--text-muted); max-width: 550px; margin: 0 auto 24px; font-size: 1rem;">
+      In accordance with academic rigor, performance metrics and loss/accuracy curves are generated exclusively from genuine validation runs on your dataset.
+    </p>
+
+    <div style="background: var(--bg-card-subtle); padding: 20px; border-radius: var(--radius-md); max-width: 520px; margin: 0 auto 30px; text-align: left; border: 1px solid var(--border-light);">
+      <h4 style="font-size: 0.95rem; margin-bottom: 8px; color: var(--primary-800);">To train your CNN model:</h4>
+      <ol style="padding-left: 20px; font-size: 0.88rem; color: var(--text-body);">
+        <li>Place your class folders inside the <code>dataset/</code> folder.</li>
+        <li>Execute in your terminal:</li>
+      </ol>
+      <div style="margin-top: 10px; background: #0c2317; color: #86efac; padding: 10px 14px; border-radius: 6px; font-family: monospace; font-size: 0.9rem;">
+        python train_model.py
+      </div>
+    </div>
+
+    <a href="{{ url_for('prediction') }}" class="btn btn-secondary">
+      Go to Prediction Page
+    </a>
+  </div>
+
+  {% else %}
+  <!-- Trained State: Dynamic Real Analytics -->
+
+  <!-- KPI Metric Cards -->
+  <div class="metrics-summary-grid">
+    <!-- Training Accuracy -->
+    <div class="metric-card">
+      <div class="metric-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+      </div>
+      <div class="metric-info">
+        <h5>Training Accuracy</h5>
+        <div class="metric-value">{{ (history.final_accuracy * 100)|round(2) }}%</div>
+      </div>
+    </div>
+
+    <!-- Validation Accuracy -->
+    <div class="metric-card">
+      <div class="metric-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+      </div>
+      <div class="metric-info">
+        <h5>Validation Accuracy</h5>
+        <div class="metric-value">{{ (history.final_val_accuracy * 100)|round(2) }}%</div>
+      </div>
+    </div>
+
+    <!-- Training Loss -->
+    <div class="metric-card">
+      <div class="metric-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+      </div>
+      <div class="metric-info">
+        <h5>Training Loss</h5>
+        <div class="metric-value">{{ history.final_loss|round(4) }}</div>
+      </div>
+    </div>
+
+    <!-- Validation Loss -->
+    <div class="metric-card">
+      <div class="metric-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+      </div>
+      <div class="metric-info">
+        <h5>Validation Loss</h5>
+        <div class="metric-value">{{ history.final_val_loss|round(4) }}</div>
+      </div>
+    </div>
+
+    <!-- Classes -->
+    <div class="metric-card">
+      <div class="metric-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+      </div>
+      <div class="metric-info">
+        <h5>Number of Classes</h5>
+        <div class="metric-value">{{ history.num_classes }}</div>
+      </div>
+    </div>
+
+    <!-- Total Images -->
+    <div class="metric-card">
+      <div class="metric-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+      </div>
+      <div class="metric-info">
+        <h5>Total Images</h5>
+        <div class="metric-value">{{ history.total_images }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive Loss & Accuracy Charts -->
+  <div class="charts-grid">
+    <!-- Accuracy Curve -->
+    <div class="chart-card">
+      <div class="chart-card-header">
+        <h3>Accuracy vs Epochs</h3>
+        <span class="badge badge-green">Convergence</span>
+      </div>
+      <div class="chart-canvas-wrap">
+        <canvas id="accuracyChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Loss Curve -->
+    <div class="chart-card">
+      <div class="chart-card-header">
+        <h3>Loss vs Epochs</h3>
+        <span class="badge badge-amber">Optimization</span>
+      </div>
+      <div class="chart-canvas-wrap">
+        <canvas id="lossChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confusion Matrix Section -->
+  <div class="matrix-card">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+      <div>
+        <h3>Confusion Matrix (Validation Set)</h3>
+        <p style="color:var(--text-muted); font-size:0.9rem;">
+          Cross-tabulation of ground-truth classes versus CNN predicted classes on the holdout validation split.
+        </p>
+      </div>
+      <span class="badge badge-blue">Evaluated Samples: {{ metrics.val_samples }}</span>
+    </div>
+
+    {% if metrics.confusion_matrix %}
+    <div style="overflow-x: auto;">
+      <table class="matrix-table">
+        <thead>
+          <tr>
+            <th style="background:#0c2b1a; color:#fff;">Actual \ Predicted</th>
+            {% for c in metrics.classes %}
+            <th>{{ c }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in metrics.confusion_matrix %}
+          {% set row_idx = loop.index0 %}
+          <tr>
+            <th style="text-align: left;">{{ metrics.classes[row_idx] }}</th>
+            {% for count in row %}
+            {% set col_idx = loop.index0 %}
+            <td class="{% if row_idx == col_idx %}matrix-cell-match{% endif %}">
+              {{ count }}
+            </td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p style="color:var(--text-muted); padding: 20px 0;">Confusion matrix details are recorded during the validation step.</p>
+    {% endif %}
+  </div>
+
+  <!-- Embed JSON History for Chart.js -->
+  <script id="trainingHistoryData" type="application/json">
+    {{ history|tojson }}
+  </script>
+  {% endif %}
+
+</div>
+{% endblock %}

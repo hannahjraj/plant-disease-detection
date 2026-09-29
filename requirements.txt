@@ -1,0 +1,9 @@
+# Plant Disease Detection System Dependencies
+Flask>=3.0.0
+Pillow>=10.0.0
+numpy>=1.24.0
+tensorflow>=2.15.0
+matplotlib>=3.7.0
+scikit-learn>=1.3.0
+Werkzeug>=3.0.0
+gunicorn>=21.2.0
